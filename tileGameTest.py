@@ -25,17 +25,17 @@ pink = (255,200,200)
 camX = 0
 camY = 0
 
-levell = []                 #levellijst is een lege lijst
+levell = []                 #level list
 
-run = True                  # Of het spel runtss
-screenX = 300               # Breedde van Scherm
-screenY = 300               # Lengte van Scherm
+run = True                  # The game is running
+screenX = 300               # Width of Screen
+screenY = 300               # Length of Screen
 WinY = -3
 WinX = -3
 tileX, tileY = 50, 50
 PlayerX, PlayerY = 0,0
 
-level = open("level.txt", "r+")                         #Open level.txt als level
+level = open("level.txt", "r+")                         #Open level.txt as level
 
 class tile(object):
     def __init__(self, x, y, t):
@@ -95,8 +95,8 @@ def giveInfo():
 
 logo = pygame.image.load( 'tileLogo.png' )
 
-Screen = pygame.display.set_mode((screenX, screenY))  #Scherm is een nieuw Scherm dat kan worden vergroot & verkleind
-pygame.display.set_caption("Tile-Venture")                        #De titel is Tile-Venture
+Screen = pygame.display.set_mode((screenX, screenY))  #Make a new Screen as ' Screen '
+pygame.display.set_caption("Tile-Venture")                        #The title is Tile-Venture
 pygame.display.set_icon(logo)
 
 def movePlayer(direction):
