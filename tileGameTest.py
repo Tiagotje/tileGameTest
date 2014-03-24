@@ -150,7 +150,7 @@ while run:
     #draw a map
     rn = -1
     Screen.fill(black)
-    if (PlayerX-4 > camX) and (camX < len(levell[0])-6):
+    if (PlayerX-4 > camX) and (camX < len(levell[0])-7):
         camX += 3
     if (PlayerX-1 < camX) and (camX > 0):
         camX -= 3
