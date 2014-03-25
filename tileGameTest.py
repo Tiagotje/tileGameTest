@@ -13,7 +13,7 @@
 import pygame               #Importeer pygame functies
 
 pygame.init()               #Start pygame
-                            #Defineer de kleuren  \/
+
 red = (255,0,0)
 green = (0,255,0)
 blue = (0,0,255)
@@ -30,22 +30,25 @@ levell = []                 #level list
 run = True                  # The game is running
 screenX = 300               # Width of Screen
 screenY = 300               # Length of Screen
-WinY = -3
+WinY = -3                   # Temporary Win X and Y
 WinX = -3
-tileX, tileY = 50, 50
-PlayerX, PlayerY = 0,0
+tileX, tileY = 50, 50       # The size of a tile
+PlayerX, PlayerY = 0,0      # Tempoary Player X and Y
 
 level = open("level.txt", "r+")                         #Open level.txt as level
 
-class tile(object):
-    def __init__(self, x, y, t):
+class tile(object):                                     #Define the tile Class
+
+# 0 = Air,  3 = Wall,  4 = Spawnpoint player,  5 = The end,  6 = Door closed, 7 = Door open
+
+    def __init__(self, x, y, t):                        #What to do with a new tile
         self.x = x
         self.y = y
         self.t = t
         if self.t == 3: self.solid = True
         elif self.t == 6: self.solid = True
         else: self.solid = False
-    def update(item):
+    def update(item):                                   #Update al the tile
         if item.t == 3:
             pygame.draw.rect(Screen, darkBlue,((item.x-camX)*tileX, (item.y-camY)*tileY, tileX, tileY))
         elif item.t == 0:
@@ -63,14 +66,14 @@ class tile(object):
             pygame.draw.rect(Screen, (150, 100, 0),((item.x-camX)*tileX, (item.y-camY)*tileY, tileX, tileY-30))
             item.solid = False
         else: print item.t
-    def toggle(item):
+    def toggle(item):                                   #Toggle tiles  (Doors)
         if item.t == 6:
             item.t = 7
         elif item.t == 7:
             item.t = 6
 
 rn = -1
-for line in level:
+for line in level:                                      #Reads the list and change the numbers into class objects
     rn += 1
     rowl = line.split(",")
     if rowl[ len(rowl)-1 ][-1] == "\n":
@@ -81,9 +84,8 @@ for line in level:
         cn += 1
     levell.append( rowl )
 
-       #Print levellijst ter controle
 
-def giveInfo():
+def giveInfo():                                         #Prints al the info
     print "______________________"
     print "CamX: " + str(camX) + "CamY: " + str(camY)
     print "WinX: " + str(WinX) + "WinY: " + str(WinY)
@@ -93,13 +95,13 @@ def giveInfo():
     print "Block links: " + str(levell[PlayerY][PlayerX-1].solid)
     print "Block rechts: " + str(levell[PlayerY][PlayerX+1].solid)
 
-logo = pygame.image.load( 'tileLogo.png' )
 
-Screen = pygame.display.set_mode((screenX, screenY))  #Make a new Screen as ' Screen '
-pygame.display.set_caption("Tile-Venture")                        #The title is Tile-Venture
+logo = pygame.image.load( 'tileLogo.png' )
+Screen = pygame.display.set_mode((screenX, screenY))  #Start screen and logo
+pygame.display.set_caption("Tile-Venture")
 pygame.display.set_icon(logo)
 
-def movePlayer(direction):
+def movePlayer(direction):                              #Move the player
     global PlayerX, PlayerY, WinX, WinY
     try:
         if (direction.lower() == "down") and (not levell[PlayerY+1][PlayerX].solid):
@@ -117,7 +119,7 @@ def movePlayer(direction):
         return levell
 
 
-for row in levell:
+for row in levell:                                      #Set PlayerX and PlayerY to the 4 and remove the 4
     for item in row:
         if item.t == 4:
             item.t = 0
@@ -126,7 +128,7 @@ for row in levell:
 
 
 
-while run:
+while run:                                              #Main loop
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
@@ -147,10 +149,9 @@ while run:
                 levell[PlayerY][PlayerX-1].toggle()
                 levell[PlayerY-1][PlayerX].toggle()
         pygame.display.flip()
-    #draw a map
     rn = -1
     Screen.fill(black)
-    if (PlayerX-4 > camX) and (camX < len(levell[0])-7):
+    if (PlayerX-4 > camX) and (camX < len(levell[0])-7): #Move the cam
         camX += 3
     if (PlayerX-1 < camX) and (camX > 0):
         camX -= 3
@@ -159,11 +160,11 @@ while run:
     if (PlayerY-1 < camY) and (camY > 0):
         camY -= 3
 
-    if (PlayerX == WinX) and (PlayerY == WinY):
+    if (PlayerX == WinX) and (PlayerY == WinY):         #Check if player has won
         run = False
 
 
-    for row in levell:
+    for row in levell:                                  #Draw the player (It's not a tile)
         for item in row:
             item.update()
     pygame.draw.rect(Screen, green,((PlayerX-camX)*50, (PlayerY-camY)*50, 50, 50))
